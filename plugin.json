@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "codex-performance-profiler",
+  "version": "0.1.0",
+  "description": "Read-only Codex Desktop telemetry capability probe for WO-0001"
+}

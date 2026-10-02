@@ -58,4 +58,10 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-Project bootstrap. The first work package is a Windows Desktop capability/data-source spike. It must prove the plugin side-panel surface and the minimum reliable telemetry sources before substantial implementation is allowed.
+P0 capability/data-source spike is in progress. A minimal local diagnostic plugin package and read-only rollout probe are available; the Codex Desktop conversation side panel and live plugin data path have not yet been verified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
+
+### P0 diagnostic probe
+
+With Node.js installed, run `node scripts/probe.mjs --file <absolute-path-to-a-Codex-rollout.jsonl>`. The optional `--measure` flag reports one-shot process time and peak RSS to stderr. The JSON output aliases native IDs and includes only allowlisted telemetry fields. Do not commit or share raw rollout files.
+
+To make the skill package available in local Codex, register this repository as a marketplace with `codex plugin marketplace add .`, then install `codex-performance-profiler@codex-performance-profiler-local` using `codex plugin add`. This package is a P0 diagnostic skill, not the planned side-panel product. Run `node --test test/probe.test.mjs` for the privacy and timestamp checks.

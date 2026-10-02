@@ -8,7 +8,7 @@
 
 `WO-0001-WINDOWS-DESKTOP-CAPABILITY-SPIKE`
 
-Status: `READY`
+Status: `IN_PROGRESS`
 
 Coordination Issue: #1 — `[WO-0001] P0 Windows Desktop capability and telemetry source spike`
 
@@ -34,3 +34,7 @@ Development may begin from WO-0001 immediately. The team may decompose the Work 
 ## Hard constraints
 
 No database, cloud telemetry, unsupported Desktop patch, generalized daemon, or full product UI in P0. Do not turn unavailable timing fields into inferred "thinking time".
+
+## Latest evidence
+
+The installable P0 diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. The side-panel and plugin-only live data path remain unverified, so P0 exit has not passed.
