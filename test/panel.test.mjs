@@ -19,6 +19,7 @@ test('stdio MCP App advertises a thread entrypoint and serves a static fullscree
     assert.equal(resource.contents[0].mimeType, 'text/html;profile=mcp-app');
     assert.deepEqual(resource.contents[0]._meta?.['openai/ui']?.availableDisplayModes, ['fullscreen']);
     assert.match(resource.contents[0].text, /Profiler panel probe/);
+    assert.match(resource.contents[0].text, /MCP App host handshake succeeded/);
     assert.doesNotMatch(resource.contents[0].text, /rollout|CODEX_HOME|thread_id/);
   } finally {
     await client.close();
