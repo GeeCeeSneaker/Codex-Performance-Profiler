@@ -10,7 +10,7 @@
 
 Status: `READY`
 
-Coordination Issue: to be linked after bootstrap publication.
+Coordination Issue: #1 — `[WO-0001] P0 Windows Desktop capability and telemetry source spike`
 
 ## Objective
 
@@ -29,7 +29,7 @@ Prove the supported Codex Windows Desktop integration surface and exact telemetr
 
 ## Dispatch rule
 
-Development may begin from WO-0001 immediately after the bootstrap documents are on `main`. The team may decompose the Work Order into Issues/PRs, but P0 exit requires one coherent evidence package and independent review.
+Development may begin from WO-0001 immediately. The team may decompose the Work Order into Issues/PRs, but P0 exit requires one coherent evidence package and independent review.
 
 ## Hard constraints
 
