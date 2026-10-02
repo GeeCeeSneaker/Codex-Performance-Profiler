@@ -1,7 +1,7 @@
 import { App } from '@modelcontextprotocol/ext-apps';
 
 const status = document.getElementById('host-status');
-const app = new App({ name: 'Profiler Panel Probe', version: '0.2.1' });
+const app = new App({ name: 'Profiler Panel Probe', version: '0.2.2' });
 
 app.ontoolresult = () => {
   status.textContent = 'MCP App opened by the host';

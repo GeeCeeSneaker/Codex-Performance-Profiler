@@ -1,5 +1,6 @@
 import { createReadStream } from 'node:fs';
 import { createInterface } from 'node:readline';
+import { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const TOOL_KINDS = new Map([
@@ -188,7 +189,8 @@ async function main() {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && basename(process.argv[1]) === 'probe.mjs' &&
+    import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     // File paths can identify a user. Never print the raw error message.
     console.error(`Probe failed: ${error.code ?? 'read_error'}`);

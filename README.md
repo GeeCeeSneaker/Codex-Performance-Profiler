@@ -58,7 +58,7 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints and a read-only rollout probe are available. Version `0.2.1` repairs the initial blank view; both placements now render in Windows Desktop. A live plugin data path has not yet been verified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
+P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints renders in Windows Desktop. Version `0.2.2` adds a one-shot, read-only current-thread source probe; local tests pass, while Desktop host metadata transfer and a live data path remain unverified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
 
 ### P0 diagnostic probe
 

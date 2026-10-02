@@ -38,3 +38,9 @@ Durable chronological record of material project decisions, integration findings
 - The Desktop log recorded successful UI resource read and `mcp_app_sandbox.widget_running` for the fullscreen global view. A repaired thread-hosted view also reached `widget_running`, but a fresh visual confirmation beside a conversation is still pending.
 - The static view proves supported placement and rendering. It does not yet expose active-thread identity or live telemetry, so P0 remains open.
 - A subsequent user screenshot showed the repaired thread view with its title and host-open status beside the conversation. AT-P0-01 now passes for the supported static entrypoint; the screenshot itself is not committed because it includes unrelated Desktop content.
+
+## 2026-10-02 — Current-thread source probe candidate
+
+- Inspected the tested Codex `rust-v0.157.0` app-server source: direct MCP tool calls add `_meta.threadId`. Added `profiler.sourceProbe` in plugin `0.2.2` to validate that host metadata, match the corresponding read-only rollout by session header, and return only a sanitized completed-turn summary.
+- Local stdio integration tests prove metadata reaches the new tool handler when supplied and that IDs, paths, prompts, and outputs stay out of its response. A local scan of this chat's approximately 10 MB active rollout matched and recovered a completed turn in 200 ms with 85 MiB one-shot peak RSS.
+- Installed `0.2.2` locally. Actual Desktop metadata transfer, live update behavior, and budget compliance remain unverified; no companion or architecture change was added.
