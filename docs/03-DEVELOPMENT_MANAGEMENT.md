@@ -6,6 +6,8 @@ The project uses **bounded team autonomy**. The v1 requirements, architecture bo
 
 Repository state is authoritative over transient chat/terminal context.
 
+Minimum-necessary design is a continuous execution rule, not only a milestone review criterion. Every actor applies it before adding complexity, while implementing, when correcting defects, and when closing work.
+
 ## 2. Roles
 
 ### Owner
@@ -18,6 +20,8 @@ Without explicit Owner authorization for a specific action, Reviewer must not op
 
 ### Development Team
 Within the Master Plan the team owns implementation execution, branches/Issues/PRs, tests, diagnostics, same-responsibility dependency choice, documentation, evidence, refactoring, defect repair, and progression to dependent pre-authorized phases when exit criteria pass.
+
+The team must challenge unnecessary complexity as part of ordinary engineering. It is authorized to simplify or delete project-owned layers, fallbacks, abstractions, dependencies, state, and code that are no longer required, provided accepted behavior and evidence remain intact.
 
 ## 3. Authority levels
 
@@ -74,6 +78,8 @@ Independent review is expected at:
 
 Non-blocking work may continue while review is pending if it does not depend on a disputed foundation.
 
+The milestone review is a backstop, not the first point at which minimalism is considered. Each substantive design or implementation change must already have applied the minimum-necessary rule when the complexity is introduced.
+
 ## 6. PR and merge discipline
 
 - Implementation PRs reference phase/Work Order and acceptance evidence.
@@ -81,23 +87,34 @@ Non-blocking work may continue while review is pending if it does not depend on 
 - Do not merge known privacy leakage, metric-semantic corruption, unsupported UI patching, or architecture escalation without resolution.
 - Green tests are necessary evidence, not independent project verification.
 - Final v1 qualification binds to an exact release head.
+- A PR that adds material complexity must state the requirement or demonstrated failure that makes the addition necessary; routine code need not create a separate process artifact for this.
 
 ## 7. Handoff standard
 
 Material handoff includes objective, phase/WO, exact PR/head, changed modules, tests/CI, Windows evidence, telemetry reconciliation, resource evidence, known issues, architecture deviations, minimalism review, and next action.
 
-## 8. Minimum-necessary review
+## 8. Lifecycle minimum-necessary discipline
 
-At each integration point ask:
-- What permanent process, dependency, persistence, service, field, fallback, or abstraction was added?
-- Which frozen requirement or demonstrated failure requires it?
-- Could Codex's existing data/source own this responsibility?
-- Can any earlier workaround now be deleted?
-- Are we duplicating OpenTelemetry/rollout/plugin capabilities already available upstream?
+This discipline applies to requirement drafting, architecture, coding, tests, bug fixes, compatibility work, packaging, operations, release qualification, and future ADCP integration.
+
+Before adding a positive complexity delta, ask:
+- What exact accepted requirement, invariant, or demonstrated failure requires it now?
+- Can an existing Codex, Windows, plugin, MCP, runtime, or project component already own the responsibility?
+- Can the requirement be met by a smaller change to an existing boundary?
+- Are we solving an observed problem, or only preparing for a hypothetical future one?
+
+During and after implementation ask:
+- What permanent process, dependency, persistence, service, field, fallback, state, configuration switch, or abstraction was added?
+- Can any earlier workaround, spike path, duplicate parser, compatibility branch, test fixture, or documentation now be deleted or collapsed?
+- Are we duplicating OpenTelemetry, rollout, app-server, plugin, or platform capabilities already available upstream?
 - Are we storing data that can be replayed instead?
-- Did future ADCP extensibility become speculative ADCP implementation?
+- Did provider-neutrality remain an interface boundary, or turn into speculative multi-provider machinery?
+- Did future ADCP extensibility become present-day ADCP implementation?
+- Does the fix introduce more machinery than the failure it addresses warrants?
 
-Unnecessary complexity is a blocking finding even if functionality works.
+Unnecessary complexity is a blocking engineering defect even if functionality works. Complexity that was justified earlier must be removed when its justification disappears. Do not preserve architecture merely because code already exists.
+
+Applying this discipline must itself remain lightweight: use normal design notes, PR evidence, Work Order handoffs, and Reviewer findings. Do not add a separate complexity database, approval workflow, score, or lifecycle state.
 
 ## 9. Metric-integrity review
 
