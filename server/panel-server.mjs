@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 const UI_URI = 'ui://codex-performance-profiler/p0-panel';
 const html = await readFile(fileURLToPath(new URL('./panel.html', import.meta.url)), 'utf8');
-const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.0' });
+const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.1' });
 
 registerAppTool(server, 'profiler.open', {
   title: 'Profiler Panel Probe',
@@ -15,7 +15,7 @@ registerAppTool(server, 'profiler.open', {
   inputSchema: z.object({}),
   _meta: {
     ui: { resourceUri: UI_URI },
-    'openai/ui': { entrypoints: [{ type: 'thread' }] },
+    'openai/ui': { entrypoints: [{ type: 'global' }, { type: 'thread' }] },
   },
 }, async () => ({
   content: [{ type: 'text', text: 'Profiler panel probe opened. No telemetry was collected.' }],

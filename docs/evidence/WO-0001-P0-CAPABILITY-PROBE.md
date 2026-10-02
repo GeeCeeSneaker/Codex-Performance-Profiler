@@ -7,11 +7,11 @@ Status: **IN_PROGRESS**. This is development evidence, not independent P0 accept
 - Date: 2026-10-02 (America/Los_Angeles).
 - Windows Codex Desktop package: `OpenAI.Codex 26.930.2377.0`.
 - Codex CLI / rollout `cli_version`: `0.157.0`.
-- Probe plugin: `0.2.0`, portable local package with one diagnostic skill, a bundled stdio MCP App, and a Node.js read-only scanner.
+- Probe plugin: `0.2.0` in the first restarted Desktop observation; repaired `0.2.1` is installed locally for the next host check. Both are portable local packages with one diagnostic skill, a bundled stdio MCP App, and a Node.js read-only scanner.
 - Host: Windows; Node.js `v24.15.0` for the probe. No project-owned daemon, database, listener, network export, or Codex-file write. The MCP server is host-managed stdio and serves static UI only.
 - One previously completed Codex Desktop turn from a local rollout was used. Its native IDs, path, prompts, commands, outputs, account metadata, and raw JSONL are deliberately omitted.
 
-The installed package was listed by `codex plugin list` as enabled. A separate local app-server instance discovered its MCP tool/resource and `thread` entrypoint metadata. The running Desktop app was not restarted, so actual UI rendering and skill discovery in a new Desktop chat are **not verified**.
+The installed package was listed by `codex plugin list` as enabled. A separate local app-server instance discovered its MCP tool/resource and `thread` entrypoint metadata. After a Desktop restart, `profiler.open` was available and returned successfully; the user screenshot showed a new `Profiler Panel Probe` content tab beside the conversation, but its body was blank. The Desktop log for that open reported `Uncaught SyntaxError: Failed to execute 'write' on 'Document': Invalid or unexpected token` during widget execution. A local syntax check reproduced the error: the build's string replacement expanded `$` sequences in bundled JavaScript and inserted duplicate HTML into it. Version `0.2.1` fixes the replacement, adds a global entrypoint at the user's request, and passes a bundled-script syntax regression test. The repaired UI and global navigation placement have **not yet been observed in a freshly loaded Desktop session**.
 
 ## Capability and source matrix
 
@@ -19,9 +19,9 @@ The installed package was listed by `codex plugin list` as enabled. A separate l
 
 | Fact or surface | P0 finding | Exact observed source and metric quality | Limitation |
 | --- | --- | --- | --- |
-| Local plugin package | SUPPORTED | `codex plugin add`/`list`, package `0.2.0`; cached bundle hash matched source | Installed package contains only manifest, skill, probe script, and bundled UI/server; no `node_modules`. |
-| MCP App thread entrypoint metadata | SUPPORTED in local stdio/app-server protocol | `tools/list` and separate app-server `mcpServerStatus/list` both exposed `profiler.open`, one UI resource, and `thread` entrypoint | `plugin/installed` local summary had no `extensions` field; it must not be used as a positive UI-rendering claim. |
-| Conversation side panel | UNVERIFIED—NOT_EXERCISED | Static fullscreen-only MCP App/resource now exists | Running Codex Desktop renderer has not been reloaded/opened; no screenshot or runtime UI proof. AT-P0-01 open. |
+| Local plugin package | SUPPORTED | `codex plugin add`/`list`, packages `0.2.0` and `0.2.1`; original cached bundle hash matched source | Installed package contains only manifest, skill, probe script, and bundled UI/server; no `node_modules`. |
+| MCP App entrypoint metadata | SUPPORTED in local stdio/app-server protocol | `0.2.0` advertised `thread`; `0.2.1` local `tools/list` advertises both `global` and `thread`, with one UI resource | The `0.2.1` global navigation placement has not yet been exercised in Desktop. |
+| Conversation content tab | PARTIAL—TAB_OPENED | After restart, `profiler.open` returned successfully and the user screenshot showed a `Profiler Panel Probe` tab beside the conversation | The `0.2.0` tab body was blank because of a verified build error. Repaired `0.2.1` rendering is pending; AT-P0-01 remains open. |
 | Live turn/tool/usage notifications | UNVERIFIED—APP_SERVER_ONLY | `rust-v0.157.0` protocol declares `turn/started`, `item/started`, `item/completed`, `thread/tokenUsage/updated`, and `turn/completed` | This MCP server is a separate peer, with no supported subscription to the active Desktop app-server shown. A second app-server session would not observe the Desktop turn. |
 | Thread and turn IDs | AVAILABLE_INDIRECTLY | `token_usage_record.thread_id/turn_id`, `item_completed.thread_id/turn_id`, `task_started.turn_id`; exact identity | Probe replaces native IDs with local aliases in output. Current-thread context is not exposed to this skill. |
 | Turn start/end/wall duration | AVAILABLE_INDIRECTLY | `task_started.started_at`, `task_complete.completed_at/duration_ms`; reported duration exact | Lifecycle timestamps are Unix seconds; tool timestamps are Unix milliseconds. |
@@ -33,7 +33,7 @@ The installed package was listed by `codex plugin list` as enabled. A separate l
 | Model TTFT/TBT | UNVERIFIED—INSPECTED_SOURCE_ABSENT | `task_complete.time_to_first_token_ms` is **turn-level**, not model TTFT | Model TTFT/TBT remain unavailable for this source. |
 | Retry/reconnect | UNVERIFIED—NOT_EXERCISED | No explicit event in inspected completed turn | Do not infer retries from gaps or repeated calls. |
 | Rollout discovery/access | AVAILABLE_INDIRECTLY | `CODEX_HOME/sessions` file discovery and read-only JSONL open | A 12-second watch of the active file observed two growth events and 3,620 appended bytes, including tool completion and token-count records. Automatic active-thread selection by the MCP App remains unproven. |
-| Host appearance/theme | UNVERIFIED—NOT_EXERCISED | MCP App host context supports theme in the standard | Desktop renderer not exercised. |
+| Host appearance/theme | UNVERIFIED—NOT_EXERCISED | MCP App host context supports theme in the standard | The blank `0.2.0` view never completed app initialization. |
 
 Official documentation supports portable plugin manifests and local marketplaces: <https://developers.openai.com/plugins/build/plugins>. The documented `{ type: "thread" }` conversation panel is described for ChatGPT extensions: <https://developers.openai.com/plugins/build/extensions>. Codex upstream commit `a1f40f3f1326eff7c81b860a4f4e27c1be186e10` added extension fields to hosted plugin summaries; this is not proof that a local MCP App renders in the tested Desktop instance. The available official documentation does **not** by itself prove current-thread lifecycle/usage event access by this package.
 
@@ -57,7 +57,7 @@ The first span's 0 ms is an observed same-millisecond timestamp pair, **not** a 
 
 | Test | State | Evidence / gap |
 | --- | --- | --- |
-| AT-P0-01 side panel | OPEN | Real MCP App thread entrypoint and fullscreen UI resource pass stdio/app-server metadata checks; Desktop rendering remains untested. |
+| AT-P0-01 side panel | PARTIAL | Desktop opened the thread content tab, but the `0.2.0` view failed before render. `0.2.1` fixes the verified bundle syntax error and adds a global entrypoint; both host views need a fresh check. |
 | AT-P0-02 identity/duration | PARTIAL | Native IDs and completed-turn timing found read-only in rollout; no live panel binding. |
 | AT-P0-03 usage | PARTIAL | Six native token fields reconciled between `token_usage_record` and final `token_count` in one completed turn; visible Desktop UI reconciliation remains open. |
 | AT-P0-04 tool lifecycle | PARTIAL | 13 retrospective spans; live start/end observation still needed. |
@@ -71,8 +71,8 @@ Three active scans of the same approximately 0.68 MB completed rollout took **18
 
 ## Architecture decision pending
 
-Keep the P0 MCP App as a static host-capability probe and the rollout scanner read-only. The rollout source provides retrospective turn, usage, and tool facts and grows during an active turn. Do not add an independent Codex app-server session and mistake its notifications for the active Desktop conversation. A telemetry companion would be premature until the actual Desktop UI and current-thread data-access surfaces are tested in a freshly loaded plugin session. If those surfaces are absent, record the exact host limitation and escalate before changing the accepted side-panel architecture. No ADR change is proposed from this partial sample.
+Keep the P0 MCP App as a static host-capability probe and the rollout scanner read-only. The rollout source provides retrospective turn, usage, and tool facts and grows during an active turn. Do not add an independent Codex app-server session and mistake its notifications for the active Desktop conversation. The user prefers a left-navigation dashboard; `0.2.1` advertises a global entrypoint while retaining the thread tab for the original side-panel test. This changes placement only and does not establish current-thread identity or live telemetry access. A telemetry companion would be premature until the repaired Desktop UI and current-thread data-access surfaces are tested in a freshly loaded plugin session. If those surfaces are absent, record the exact host limitation and escalate before changing the accepted side-panel architecture. No ADR change is proposed from this partial sample.
 
 ## Handoff
 
-Development Status: `IN_PROGRESS`; Independent Review: `PENDING`. Phase/WO: `P0 / WO-0001`. Coordination Issue: `#1`; draft PR: `#2`. Exact candidate head and CI result are tracked on the PR. Windows runtime evidence: installed MCP App protocol metadata and completed rollout scan; Desktop side panel not verified. Telemetry reconciliation: native rollout fields match across two record families, external UI reconciliation pending. Minimalism review: no daemon, database, network listener, or product UI added; one host-managed stdio MCP server exists only for panel capability testing. Next action: restart/reload Desktop with the local plugin, test the supported thread entrypoint in the renderer, then test a live harmless turn and close the remaining AT-P0 items.
+Development Status: `IN_PROGRESS`; Independent Review: `PENDING`. Phase/WO: `P0 / WO-0001`. Coordination Issue: `#1`; draft PR: `#2`. Exact candidate head and CI result are tracked on the PR. Windows runtime evidence: the `0.2.0` thread tab opened but failed to render because of the confirmed bundle syntax error; `0.2.1` fixes it locally and is installed, pending Desktop reload. Telemetry reconciliation: native rollout fields match across two record families, external UI reconciliation pending. Minimalism review: no daemon, database, network listener, or product UI added; one host-managed stdio MCP server exists only for panel capability testing. Next action: restart/reload Desktop with `0.2.1`, verify the global navigation entry and rendered view, then test a live harmless turn and close the remaining AT-P0 items.

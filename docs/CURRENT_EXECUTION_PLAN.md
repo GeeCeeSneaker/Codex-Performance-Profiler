@@ -37,4 +37,4 @@ No database, cloud telemetry, unsupported Desktop patch, generalized daemon, or 
 
 ## Latest evidence
 
-The installable P0 MCP App/diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. The MCP thread entrypoint is visible in local protocol metadata; actual Desktop side-panel rendering and the plugin-only live data path remain unverified, so P0 exit has not passed.
+The installable P0 MCP App/diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. A restarted Desktop opened the `0.2.0` thread tab, but its body was blank because of a verified bundle syntax error. Version `0.2.1` fixes that error and adds a user-requested global navigation entrypoint; it is installed, with Desktop rendering still pending. The plugin-only live data path remains unverified, so P0 exit has not passed.

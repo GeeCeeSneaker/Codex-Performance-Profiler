@@ -14,7 +14,7 @@ const app = await build({
   minify: true,
 });
 const appCode = app.outputFiles[0].text.replace(/<\/script/gi, '<\\/script');
-const html = (await readFile('server/panel.html', 'utf8')).replace('<!-- APP_SCRIPT -->', `<script>${appCode}</script>`);
+const html = (await readFile('server/panel.html', 'utf8')).replace('<!-- APP_SCRIPT -->', () => `<script>${appCode}</script>`);
 await writeFile(`${pluginDist}/panel.html`, html);
 
 await build({

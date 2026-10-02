@@ -25,3 +25,9 @@ Durable chronological record of material project decisions, integration findings
 - Protocol tests and a separate local app-server `mcpServerStatus/list` found the thread entrypoint in tool metadata; `plugin/installed` did not include local extension summary fields. Actual Desktop rendering remains untested.
 - Moved the installable plugin under `plugins/codex-performance-profiler/` so its cache omits repository history and development dependencies.
 - Observed read-only growth of the active rollout during a Desktop turn and reconciled six usage fields across native record families. Neither observation proves that the MCP App receives active-thread identity or app-server notifications.
+
+## 2026-10-02 — First Desktop view and left-navigation request
+
+- After a Desktop restart, the `0.2.0` `profiler.open` tool returned successfully and a conversation content tab opened. The user screenshot showed a blank tab body. The Desktop log recorded an invalid-token syntax error during widget execution.
+- Reproduced the syntax error in the bundled inline script. The build's `String.replace` replacement string interpreted `$` sequences in bundled JavaScript and inserted duplicate HTML. Changed it to a replacement callback and added a regression test that parses the bundled script.
+- The user chose a left-navigation dashboard. Version `0.2.1` advertises a `global` entrypoint alongside the existing `thread` entrypoint; the new package is locally installed. Desktop placement and rendering of the repaired view still require a fresh host check.

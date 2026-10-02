@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import vm from 'node:vm';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
-test('stdio MCP App advertises a thread entrypoint and serves a static fullscreen view', async () => {
+test('stdio MCP App advertises global and thread entrypoints and serves a static fullscreen view', async () => {
   const client = new Client({ name: 'p0-panel-test', version: '1.0.0' });
   const serverPath = process.env.PANEL_SERVER_PATH ?? 'plugins/codex-performance-profiler/dist/server.mjs';
   const transport = new StdioClientTransport({ command: process.execPath, args: [serverPath] });
@@ -12,7 +14,7 @@ test('stdio MCP App advertises a thread entrypoint and serves a static fullscree
     const { tools } = await client.listTools();
     assert.equal(tools.length, 1);
     assert.equal(tools[0].name, 'profiler.open');
-    assert.deepEqual(tools[0]._meta?.['openai/ui']?.entrypoints, [{ type: 'thread' }]);
+    assert.deepEqual(tools[0]._meta?.['openai/ui']?.entrypoints, [{ type: 'global' }, { type: 'thread' }]);
     const result = await client.callTool({ name: 'profiler.open', arguments: {} });
     assert.equal(result.isError, undefined);
     const resource = await client.readResource({ uri: 'ui://codex-performance-profiler/p0-panel' });
@@ -24,4 +26,12 @@ test('stdio MCP App advertises a thread entrypoint and serves a static fullscree
   } finally {
     await client.close();
   }
+});
+
+test('bundled inline script parses without HTML replacement expansion', async () => {
+  const html = await readFile('plugins/codex-performance-profiler/dist/panel.html', 'utf8');
+  const script = html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(script);
+  assert.equal(html.match(/<!doctype html>/gi)?.length, 1);
+  assert.doesNotThrow(() => new vm.Script(script));
 });

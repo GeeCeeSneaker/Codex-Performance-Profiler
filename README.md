@@ -58,7 +58,7 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-P0 capability/data-source spike is in progress. A minimal local MCP App with a thread entrypoint and a read-only rollout probe are available; rendering the panel in the running Codex Desktop app and a live plugin data path have not yet been verified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
+P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints and a read-only rollout probe are available. The first Desktop thread tab opened but was blank because of a build error; version `0.2.1` repairs the bundle and awaits host verification. A live plugin data path has not yet been verified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
 
 ### P0 diagnostic probe
 
