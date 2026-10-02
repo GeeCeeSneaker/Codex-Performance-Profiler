@@ -22,12 +22,21 @@ A Reviewer binds conclusions to the exact candidate head and applicable Work Ord
 
 ## Architecture/minimalism
 
-- No unjustified daemon/service/database/queue/network listener.
+This section is mandatory at every substantive review, not only release qualification.
+
+- Every material positive complexity delta has a current accepted requirement, invariant, or demonstrated failure that requires it.
+- Existing Codex/Windows/plugin/MCP/runtime capabilities were preferred over project-owned machinery where sufficient.
+- No unjustified daemon/service/database/queue/network listener/event bus/framework.
 - No duplicate persistence when Codex artifacts can be replayed.
-- Codex-specific logic remains inside adapter/integration surfaces.
-- Provider-neutral core contains no hidden Codex field assumptions.
-- Compatibility fallbacks are evidence-driven and bounded.
-- Spike/obsolete code is deleted when no longer needed.
+- No speculative provider, ADCP, dashboard, history, recovery, or compatibility machinery was introduced for hypothetical future use.
+- Codex-specific logic remains inside adapter/integration surfaces without forcing unused generic abstractions into the core.
+- Provider-neutral core contains no hidden Codex field assumptions, but provider-neutrality has not been used to justify implementing unused providers.
+- Compatibility fallbacks are evidence-driven, bounded, and still necessary for a currently supported gap.
+- Spike/obsolete code, superseded fallbacks, duplicate parsers, unused configuration, stale fields, dependencies, and tests are deleted when no longer needed.
+- A defect fix is proportionate to the demonstrated failure and does not create a broader subsystem without evidence.
+- The candidate was actively challenged for what can be removed or collapsed before approval.
+
+Unnecessary complexity is a blocking finding even when tests are green. Earlier justification does not permanently grandfather complexity whose need has disappeared.
 
 ## Privacy/security
 
@@ -43,6 +52,7 @@ A Reviewer binds conclusions to the exact candidate head and applicable Work Ord
 - Real runtime claims include exact tested Codex/plugin versions.
 - Resource budget evidence exists for integration/release milestones.
 - PR/head identity matches reviewed result.
+- Minimalism evidence is recorded in the normal PR/Work Order handoff; no separate score or process artifact is required.
 
 ## Outcomes
 
