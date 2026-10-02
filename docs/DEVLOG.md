@@ -37,3 +37,4 @@ Durable chronological record of material project decisions, integration findings
 - After restarting with `0.2.1`, the user confirmed the left-navigation entry is visible and that its page shows the probe title and status text.
 - The Desktop log recorded successful UI resource read and `mcp_app_sandbox.widget_running` for the fullscreen global view. A repaired thread-hosted view also reached `widget_running`, but a fresh visual confirmation beside a conversation is still pending.
 - The static view proves supported placement and rendering. It does not yet expose active-thread identity or live telemetry, so P0 remains open.
+- A subsequent user screenshot showed the repaired thread view with its title and host-open status beside the conversation. AT-P0-01 now passes for the supported static entrypoint; the screenshot itself is not committed because it includes unrelated Desktop content.
