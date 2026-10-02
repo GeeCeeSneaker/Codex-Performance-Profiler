@@ -14,5 +14,7 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
-      - run: node --check scripts/probe.mjs
-      - run: node --test test/probe.test.mjs
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: npm test
+      - run: git diff --exit-code -- plugins/codex-performance-profiler/dist

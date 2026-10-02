@@ -18,3 +18,10 @@ Durable chronological record of material project decisions, integration findings
 - Built a streaming, read-only rollout probe that allowlists telemetry fields and maps one completed Desktop turn into sanitized candidate events. It distinguishes native turn time to first token from unavailable model TTFT.
 - Recorded partial source/resource/privacy evidence in `evidence/WO-0001-P0-CAPABILITY-PROBE.md`.
 - Kept P0 open: a supported Codex Desktop conversation-side panel and current-thread live data path are not yet demonstrated. No companion process or architecture change was added.
+
+## 2026-10-02 — P0 reviewer-directed MCP App probe
+
+- Addressed draft PR #2 review: the first skill-only package could not test AT-P0-01. Added one bundled stdio MCP server, one opener tool/resource, a `thread` entrypoint, and a static fullscreen-only view.
+- Protocol tests and a separate local app-server `mcpServerStatus/list` found the thread entrypoint in tool metadata; `plugin/installed` did not include local extension summary fields. Actual Desktop rendering remains untested.
+- Moved the installable plugin under `plugins/codex-performance-profiler/` so its cache omits repository history and development dependencies.
+- Observed read-only growth of the active rollout during a Desktop turn and reconciled six usage fields across native record families. Neither observation proves that the MCP App receives active-thread identity or app-server notifications.

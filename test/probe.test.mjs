@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { summarizeRollout } from '../scripts/probe.mjs';
+import { summarizeRollout } from '../plugins/codex-performance-profiler/scripts/probe.mjs';
 
 test('maps a completed turn without leaking content or confusing turn and model TTFT', async () => {
   const records = [

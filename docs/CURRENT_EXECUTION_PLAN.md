@@ -37,4 +37,4 @@ No database, cloud telemetry, unsupported Desktop patch, generalized daemon, or 
 
 ## Latest evidence
 
-The installable P0 diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. The side-panel and plugin-only live data path remain unverified, so P0 exit has not passed.
+The installable P0 MCP App/diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. The MCP thread entrypoint is visible in local protocol metadata; actual Desktop side-panel rendering and the plugin-only live data path remain unverified, so P0 exit has not passed.

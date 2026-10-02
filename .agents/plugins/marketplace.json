@@ -8,7 +8,7 @@
       "name": "codex-performance-profiler",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/codex-performance-profiler"
       },
       "policy": {
         "installation": "AVAILABLE",
