@@ -4,7 +4,7 @@ Status: `READY`
 
 Phase: `P0`
 
-Coordination Issue: to be linked after bootstrap publication.
+Coordination Issue: #1 — `[WO-0001] P0 Windows Desktop capability and telemetry source spike`
 
 ## 1. Objective
 
