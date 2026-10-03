@@ -6,18 +6,23 @@
   <title>Profiler Panel Probe</title>
   <style>
     :root { color-scheme: light dark; font: 14px/1.5 system-ui, sans-serif; }
-    body { margin: 0; padding: 20px; }
+    body { margin: 0; padding: 24px; }
     main { max-width: 42rem; }
-    h1 { font-size: 1.15rem; margin: 0 0 1rem; }
-    .state { border: 1px solid currentColor; border-radius: 8px; padding: 12px; }
+    h1 { font-size: 1.3rem; margin: 0 0 .4rem; }
+    p { margin: .6rem 0; }
+    button { font: inherit; padding: .5rem .8rem; border: 1px solid currentColor; border-radius: 8px; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: default; }
+    .state { border: 1px solid currentColor; border-radius: 8px; padding: 12px; white-space: pre-line; }
     small { opacity: .7; }
   </style>
 </head>
 <body>
   <main>
     <h1>Profiler panel probe</h1>
-    <p class="state" id="host-status">Waiting for MCP App host handshake</p>
-    <small>WO-0001 P0 UI capability test. This view does not access conversation content or telemetry.</small>
+    <p id="host-status">Waiting for MCP App host handshake</p>
+    <button id="source-probe" type="button" disabled>Check current thread</button>
+    <p class="state" id="source-status" role="status">No current-thread source check has run.</p>
+    <small>WO-0001 P0 capability test. This view requests a read-only, content-free summary only when you click the button.</small>
   </main>
   <!-- APP_SCRIPT -->
 </body>

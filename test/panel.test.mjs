@@ -35,7 +35,9 @@ test('stdio MCP App advertises global and thread entrypoints and serves a static
     assert.deepEqual(resource.contents[0]._meta?.['openai/ui']?.availableDisplayModes, ['fullscreen']);
     assert.match(resource.contents[0].text, /Profiler panel probe/);
     assert.match(resource.contents[0].text, /MCP App host handshake succeeded/);
-    assert.doesNotMatch(resource.contents[0].text, /rollout|CODEX_HOME|thread_id/);
+    assert.match(resource.contents[0].text, /Check current thread/);
+    assert.match(resource.contents[0].text, /callServerTool/);
+    assert.doesNotMatch(resource.contents[0].text, /CODEX_HOME|thread_id|PRIVATE_/);
   } finally {
     await client.close();
   }
