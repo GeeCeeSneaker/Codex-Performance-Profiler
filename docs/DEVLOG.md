@@ -44,3 +44,8 @@ Durable chronological record of material project decisions, integration findings
 - Inspected the tested Codex `rust-v0.157.0` app-server source: direct MCP tool calls add `_meta.threadId`. Added `profiler.sourceProbe` in plugin `0.2.2` to validate that host metadata, match the corresponding read-only rollout by session header, and return only a sanitized completed-turn summary.
 - Local stdio integration tests prove metadata reaches the new tool handler when supplied and that IDs, paths, prompts, and outputs stay out of its response. A local scan of this chat's approximately 10 MB active rollout matched and recovered a completed turn in 200 ms with 85 MiB one-shot peak RSS.
 - Installed `0.2.2` locally. Actual Desktop metadata transfer, live update behavior, and budget compliance remain unverified; no companion or architecture change was added.
+
+## 2026-10-02 — Desktop thread context observed; rollout root pass-through candidate
+
+- After restart, a real Desktop `profiler.sourceProbe` call returned `thread_context: provided` and `rollout_match: codex_home_unavailable`. This confirms host thread metadata reaches the plugin, but its stdio process did not inherit `CODEX_HOME`; no live or retrospective current-thread data path is proven yet.
+- Codex `rust-v0.157.0` plugin configuration accepts `env_vars` for local stdio MCP servers. Version `0.2.3` adds `env_vars: ["CODEX_HOME"]` to the plugin manifest. Nine tests pass; the installed cache has the same bundled-server SHA-256 as the source package and retains the requested variable. Actual Desktop environment pass-through awaits a fresh invocation after restart.

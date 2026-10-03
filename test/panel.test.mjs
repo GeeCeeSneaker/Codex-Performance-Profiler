@@ -7,6 +7,11 @@ import vm from 'node:vm';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
+test('plugin requests the Codex home path for its local stdio server', async () => {
+  const manifest = JSON.parse(await readFile('plugins/codex-performance-profiler/mcp.json', 'utf8'));
+  assert.deepEqual(manifest.mcpServers['panel-probe'].env_vars, ['CODEX_HOME']);
+});
+
 test('stdio MCP App advertises global and thread entrypoints and serves a static fullscreen view', async () => {
   const client = new Client({ name: 'p0-panel-test', version: '1.0.0' });
   const serverPath = process.env.PANEL_SERVER_PATH ?? 'plugins/codex-performance-profiler/dist/server.mjs';
