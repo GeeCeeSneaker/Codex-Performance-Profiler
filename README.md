@@ -58,7 +58,7 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints renders in Windows Desktop. The `0.2.2` read-only source probe received the current thread ID in a real Desktop call but could not locate the rollout because `CODEX_HOME` was absent from its stdio process. Installed version `0.2.4` requests that variable in the plugin manifest and adds a button to test whether the panel can call the source probe. Both changes await a restarted Desktop check. A live data path remains unverified. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
+P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints rendered in Windows Desktop. The `0.2.2` read-only source probe received the current thread ID in a real Desktop call but could not locate the rollout because `CODEX_HOME` was absent from its stdio process. Version `0.2.4` tried an unsupported manifest field and failed to load after restart. Installed version `0.2.5` removes that field, derives Codex Home from its local plugin-cache path when necessary, and retains a button to test panel-to-source calls. Desktop recovery and the current-thread data path await a fresh restart check. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
 
 ### P0 diagnostic probe
 

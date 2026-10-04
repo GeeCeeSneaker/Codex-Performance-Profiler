@@ -1,7 +1,8 @@
 import { createReadStream } from 'node:fs';
 import { glob } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
+import { fileURLToPath } from 'node:url';
 import { summarizeRollout } from '../plugins/codex-performance-profiler/scripts/probe.mjs';
 
 const THREAD_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -21,7 +22,19 @@ async function isMatchingSession(file, threadId) {
   return false;
 }
 
-export async function probeCurrentSource(requestMeta, codexHome = process.env.CODEX_HOME) {
+function installedCodexHome() {
+  let directory = dirname(fileURLToPath(import.meta.url));
+  while (true) {
+    const parent = dirname(directory);
+    if (basename(directory).toLowerCase() === 'cache' && basename(parent).toLowerCase() === 'plugins') {
+      return dirname(parent);
+    }
+    if (parent === directory) return undefined;
+    directory = parent;
+  }
+}
+
+export async function probeCurrentSource(requestMeta, codexHome = process.env.CODEX_HOME || installedCodexHome()) {
   const threadId = requestMeta?.threadId;
   if (typeof threadId !== 'string' || !THREAD_ID.test(threadId)) {
     return { probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable' };

@@ -3,7 +3,7 @@ import { App } from '@modelcontextprotocol/ext-apps';
 const status = document.getElementById('host-status');
 const sourceStatus = document.getElementById('source-status');
 const sourceButton = document.getElementById('source-probe');
-const app = new App({ name: 'Profiler Panel Probe', version: '0.2.4' });
+const app = new App({ name: 'Profiler Panel Probe', version: '0.2.5' });
 
 sourceButton.addEventListener('click', async () => {
   sourceButton.disabled = true;
