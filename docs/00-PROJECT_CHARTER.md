@@ -72,6 +72,14 @@ Use vertical slices. First prove the actual Codex Windows Desktop plugin/extensi
 
 A failed capability spike is useful evidence and may change the integration method; it must not be hidden by silently adding unsupported UI patching or a large sidecar architecture.
 
-## 6. Governance
+## 6. Lifecycle-wide minimum-necessary invariant
+
+Minimum necessary is a permanent project invariant, not a late-stage cleanup exercise. It applies continuously to requirements, architecture, data contracts, implementation, tests, compatibility work, defect repair, packaging, operations, release qualification, and later ADCP integration.
+
+At every decision point, prefer the smallest sufficient change that satisfies an accepted requirement with trustworthy evidence. Reuse Codex/platform capabilities before introducing project-owned machinery, and remove obsolete spike code, fallbacks, abstractions, dependencies, fields, services, persistence, or compatibility paths as soon as their justification disappears. Every material positive complexity delta must trace to a frozen requirement, accepted invariant, or demonstrated failure that a simpler design cannot cover. Future extensibility by itself is not sufficient justification for present complexity.
+
+The rule also applies to project governance: do not create extra states, documents, approval gates, or process machinery merely to demonstrate compliance with minimalism.
+
+## 7. Governance
 
 Repository documents, ADRs, Work Orders, Issues, PRs, exact-head review decisions, and sanitized evidence are the durable project record. Material scope or architecture changes require documented change control.
