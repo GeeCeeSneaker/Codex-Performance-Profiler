@@ -19,26 +19,31 @@ test('stdio MCP App advertises global and thread entrypoints and serves a static
   try {
     await client.connect(transport);
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 2);
+    assert.equal(tools.length, 3);
     const opener = tools.find((tool) => tool.name === 'profiler.open');
     assert.ok(opener);
     assert.ok(tools.some((tool) => tool.name === 'profiler.sourceProbe'));
+    assert.ok(tools.some((tool) => tool.name === 'profiler.progressProbe'));
     assert.deepEqual(opener._meta?.['openai/ui']?.entrypoints, [{ type: 'global' }, { type: 'thread' }]);
     const result = await client.callTool({ name: 'profiler.open', arguments: {} });
     assert.equal(result.isError, undefined);
     assert.deepEqual(result.structuredContent, {
-      probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable',
+      probe_version: 3, thread_context: 'unavailable', rollout_match: 'unavailable',
     });
     const source = await client.callTool({ name: 'profiler.sourceProbe', arguments: {} });
     assert.deepEqual(source.structuredContent, {
       probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable',
+    });
+    const progress = await client.callTool({ name: 'profiler.progressProbe', arguments: {} });
+    assert.deepEqual(progress.structuredContent, {
+      probe_version: 3, thread_context: 'unavailable', rollout_match: 'unavailable',
     });
     const resource = await client.readResource({ uri: 'ui://codex-performance-profiler/p0-panel' });
     assert.equal(resource.contents[0].mimeType, 'text/html;profile=mcp-app');
     assert.deepEqual(resource.contents[0]._meta?.['openai/ui']?.availableDisplayModes, ['fullscreen']);
     assert.match(resource.contents[0].text, /Profiler panel probe/);
     assert.match(resource.contents[0].text, /MCP App host handshake succeeded/);
-    assert.match(resource.contents[0].text, /Refresh snapshot/);
+    assert.match(resource.contents[0].text, /Refresh live state/);
     assert.match(resource.contents[0].text, /callServerTool/);
     assert.doesNotMatch(resource.contents[0].text, /CODEX_HOME|thread_id|PRIVATE_/);
   } finally {
@@ -78,7 +83,10 @@ test('stdio MCP tool receives threadId metadata and returns only a sanitized mat
     assert.equal(result.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
     const opened = await client.callTool({ name: 'profiler.open', arguments: {}, _meta: { threadId } });
     assert.equal(opened.structuredContent?.rollout_match, 'verified');
-    assert.equal(opened.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
+    assert.equal(opened.structuredContent?.progress?.latest_completed_turn?.wall_duration_ms?.value, 1_000);
+    assert.equal(opened.structuredContent?.progress?.latest_completed_turn?.wall_duration_ms?.quality, 'derived');
+    const progress = await client.callTool({ name: 'profiler.progressProbe', arguments: {}, _meta: { threadId } });
+    assert.equal(progress.structuredContent?.update?.bytes_read, 0);
     for (const forbidden of [threadId, 'PRIVATE_']) {
       assert.ok(!JSON.stringify(result).includes(forbidden));
       assert.ok(!JSON.stringify(opened).includes(forbidden));

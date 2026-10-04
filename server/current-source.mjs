@@ -22,7 +22,7 @@ async function isMatchingSession(file, threadId) {
   return false;
 }
 
-function installedCodexHome() {
+export function installedCodexHome() {
   let directory = dirname(fileURLToPath(import.meta.url));
   while (true) {
     const parent = dirname(directory);
@@ -34,13 +34,13 @@ function installedCodexHome() {
   }
 }
 
-export async function probeCurrentSource(requestMeta, codexHome = process.env.CODEX_HOME || installedCodexHome()) {
+export async function findCurrentRollout(requestMeta, codexHome = process.env.CODEX_HOME || installedCodexHome()) {
   const threadId = requestMeta?.threadId;
   if (typeof threadId !== 'string' || !THREAD_ID.test(threadId)) {
-    return { probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable' };
+    return { thread_context: 'unavailable', rollout_match: 'unavailable' };
   }
   if (!codexHome) {
-    return { probe_version: 2, thread_context: 'provided', rollout_match: 'codex_home_unavailable' };
+    return { thread_context: 'provided', rollout_match: 'codex_home_unavailable' };
   }
 
   try {
@@ -49,18 +49,28 @@ export async function probeCurrentSource(requestMeta, codexHome = process.env.CO
     for await (const relative of glob(`**/*${threadId}*.jsonl`, { cwd: root })) {
       const candidate = join(root, relative);
       if (!(await isMatchingSession(candidate, threadId))) continue;
-      if (match) return { probe_version: 2, thread_context: 'provided', rollout_match: 'ambiguous' };
+      if (match) return { thread_context: 'provided', rollout_match: 'ambiguous' };
       match = candidate;
     }
-    if (!match) return { probe_version: 2, thread_context: 'provided', rollout_match: 'not_found' };
+    if (!match) return { thread_context: 'provided', rollout_match: 'not_found' };
+    return { thread_context: 'provided', rollout_match: 'verified', file: match };
+  } catch {
+    // Paths, native IDs, and raw records must not escape through diagnostics.
+    return { thread_context: 'provided', rollout_match: 'read_error' };
+  }
+}
+
+export async function probeCurrentSource(requestMeta, codexHome = process.env.CODEX_HOME || installedCodexHome()) {
+  const match = await findCurrentRollout(requestMeta, codexHome);
+  if (match.rollout_match !== 'verified') return { probe_version: 2, ...match };
+  try {
     return {
       probe_version: 2,
       thread_context: 'provided',
       rollout_match: 'verified',
-      summary: await summarizeRollout(records(match)),
+      summary: await summarizeRollout(records(match.file)),
     };
   } catch {
-    // Paths, native IDs, and raw records must not escape through diagnostics.
     return { probe_version: 2, thread_context: 'provided', rollout_match: 'read_error' };
   }
 }

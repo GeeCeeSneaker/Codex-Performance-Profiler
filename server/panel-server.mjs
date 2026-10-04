@@ -5,23 +5,24 @@ import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import { z } from 'zod';
 import { probeCurrentSource } from './current-source.mjs';
+import { probeCurrentProgress } from './live-source.mjs';
 
 const UI_URI = 'ui://codex-performance-profiler/p0-panel';
 const html = await readFile(fileURLToPath(new URL('./panel.html', import.meta.url)), 'utf8');
-const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.6' });
+const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.7' });
 
 registerAppTool(server, 'profiler.open', {
   title: 'Profiler Panel Probe',
-  description: 'Open a conversation-side profiler probe with a read-only, sanitized snapshot of this chat.',
+  description: 'Open a conversation-side profiler probe with a read-only, sanitized incremental snapshot of this chat.',
   inputSchema: z.object({}),
   _meta: {
     ui: { resourceUri: UI_URI },
     'openai/ui': { entrypoints: [{ type: 'global' }, { type: 'thread' }] },
   },
 }, async (_args, context) => {
-  const result = await probeCurrentSource(context.mcpReq._meta);
+  const result = await probeCurrentProgress(context.mcpReq._meta);
   return {
-    content: [{ type: 'text', text: 'Profiler panel probe opened with a read-only source check.' }],
+    content: [{ type: 'text', text: 'Profiler panel probe opened with a read-only incremental source check.' }],
     structuredContent: result,
   };
 });
@@ -47,6 +48,16 @@ server.registerTool('profiler.sourceProbe', {
   annotations: { readOnlyHint: true },
 }, async (_args, context) => {
   const result = await probeCurrentSource(context.mcpReq._meta);
+  return { content: [{ type: 'text', text: JSON.stringify(result) }], structuredContent: result };
+});
+
+server.registerTool('profiler.progressProbe', {
+  title: 'Refresh Current Codex Progress',
+  description: 'Read only newly appended records after the first bounded scan and return content-free active and latest-completed turn counters.',
+  inputSchema: z.object({}),
+  annotations: { readOnlyHint: true },
+}, async (_args, context) => {
+  const result = await probeCurrentProgress(context.mcpReq._meta);
   return { content: [{ type: 'text', text: JSON.stringify(result) }], structuredContent: result };
 });
 
