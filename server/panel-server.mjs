@@ -8,19 +8,23 @@ import { probeCurrentSource } from './current-source.mjs';
 
 const UI_URI = 'ui://codex-performance-profiler/p0-panel';
 const html = await readFile(fileURLToPath(new URL('./panel.html', import.meta.url)), 'utf8');
-const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.5' });
+const server = new McpServer({ name: 'codex-performance-profiler-p0', version: '0.2.6' });
 
 registerAppTool(server, 'profiler.open', {
   title: 'Profiler Panel Probe',
-  description: 'Open the P0 Codex Desktop panel capability probe; no telemetry is collected.',
+  description: 'Open a conversation-side profiler probe with a read-only, sanitized snapshot of this chat.',
   inputSchema: z.object({}),
   _meta: {
     ui: { resourceUri: UI_URI },
     'openai/ui': { entrypoints: [{ type: 'global' }, { type: 'thread' }] },
   },
-}, async () => ({
-  content: [{ type: 'text', text: 'Profiler panel probe opened. No telemetry was collected.' }],
-}));
+}, async (_args, context) => {
+  const result = await probeCurrentSource(context.mcpReq._meta);
+  return {
+    content: [{ type: 'text', text: 'Profiler panel probe opened with a read-only source check.' }],
+    structuredContent: result,
+  };
+});
 
 registerAppResource(server, 'Profiler P0 Panel', UI_URI, {}, async () => ({
   contents: [{

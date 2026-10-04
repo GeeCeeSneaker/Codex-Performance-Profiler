@@ -26,6 +26,9 @@ test('stdio MCP App advertises global and thread entrypoints and serves a static
     assert.deepEqual(opener._meta?.['openai/ui']?.entrypoints, [{ type: 'global' }, { type: 'thread' }]);
     const result = await client.callTool({ name: 'profiler.open', arguments: {} });
     assert.equal(result.isError, undefined);
+    assert.deepEqual(result.structuredContent, {
+      probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable',
+    });
     const source = await client.callTool({ name: 'profiler.sourceProbe', arguments: {} });
     assert.deepEqual(source.structuredContent, {
       probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable',
@@ -35,7 +38,7 @@ test('stdio MCP App advertises global and thread entrypoints and serves a static
     assert.deepEqual(resource.contents[0]._meta?.['openai/ui']?.availableDisplayModes, ['fullscreen']);
     assert.match(resource.contents[0].text, /Profiler panel probe/);
     assert.match(resource.contents[0].text, /MCP App host handshake succeeded/);
-    assert.match(resource.contents[0].text, /Check current thread/);
+    assert.match(resource.contents[0].text, /Refresh snapshot/);
     assert.match(resource.contents[0].text, /callServerTool/);
     assert.doesNotMatch(resource.contents[0].text, /CODEX_HOME|thread_id|PRIVATE_/);
   } finally {
@@ -73,8 +76,12 @@ test('stdio MCP tool receives threadId metadata and returns only a sanitized mat
     const result = await client.callTool({ name: 'profiler.sourceProbe', arguments: {}, _meta: { threadId } });
     assert.equal(result.structuredContent?.rollout_match, 'verified');
     assert.equal(result.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
+    const opened = await client.callTool({ name: 'profiler.open', arguments: {}, _meta: { threadId } });
+    assert.equal(opened.structuredContent?.rollout_match, 'verified');
+    assert.equal(opened.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
     for (const forbidden of [threadId, 'PRIVATE_']) {
       assert.ok(!JSON.stringify(result).includes(forbidden));
+      assert.ok(!JSON.stringify(opened).includes(forbidden));
     }
   } finally {
     await client.close();
@@ -84,7 +91,7 @@ test('stdio MCP tool receives threadId metadata and returns only a sanitized mat
 test('installed bundle locates its Codex home without an inherited CODEX_HOME variable', async (t) => {
   const home = await mkdtemp(join(tmpdir(), 'profiler-installed-'));
   t.after(() => rm(home, { recursive: true, force: true }));
-  const dist = join(home, 'plugins', 'cache', 'local-marketplace', 'profiler', '0.2.5', 'dist');
+  const dist = join(home, 'plugins', 'cache', 'local-marketplace', 'profiler', 'candidate', 'dist');
   const day = join(home, 'sessions', '2026', '10', '03');
   await mkdir(dist, { recursive: true });
   await mkdir(day, { recursive: true });
