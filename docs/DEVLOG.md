@@ -93,3 +93,10 @@ Durable chronological record of material project decisions, integration findings
 - Recorded one harmless completed shell call with exact native status/duration and derived envelope duration; precise live start and model timing are unavailable through the chosen path. Fresh stdio reconnect reconstructed the same completed snapshot. Provider retry remains unexercised.
 - Standalone runtime control settled at 48.4 MiB versus candidate 51.7 MiB; catch-up 609 ms, appended-byte calls 2–4 ms. These measurements do not establish Desktop process attribution or end-to-end overhead and do not relax the 40 MiB target.
 - Next: restarted thread-only Desktop closed/open sampling, host/plugin A/B and turn overhead, native visible usage comparison, exact-head independent review. Draft / P0 IN_PROGRESS retained. Detailed measurement method and limits are in the existing evidence document.
+
+
+## 2026-10-03 — Restarted minimal candidate source/resource check
+
+- After the Owner reported restart, Desktop 26.930.3930.0 exposes only the retained two tools; installed 0.2.8 process paths confirmed. The opener matched this chat, read 27,960,333 bytes, and returned active/completed state with zero skips. Direct progress reads were 1,466, 0, 0 bytes.
+- Panel-reported-closed baseline: an initial fourth Node exited itself; three stable instances summed about 145.4 MiB over about 31 s with unchanged CPU counters. One instance increased to 74.7 MiB after the opener, later 80.4 MiB. Full Desktop plugin-disabled and post-close A/B remain unmeasured; process roles remain unassigned.
+- MCP Apps browser inventory supplies no expanded tab. Host logs contain widget-running and browser-bridge timeout events; these alone cannot establish profiler side-tab rendering. User has been asked to expand the result and report the visible state. No host UI patch or runtime workaround added. Detailed evidence/limits are in the existing P0 evidence document.
