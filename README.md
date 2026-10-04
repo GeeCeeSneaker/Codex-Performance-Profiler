@@ -58,4 +58,10 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-Project bootstrap. The first work package is a Windows Desktop capability/data-source spike. It must prove the plugin side-panel surface and the minimum reliable telemetry sources before substantial implementation is allowed.
+P0 capability/data-source spike is in progress. A minimal local MCP App with global and thread entrypoints rendered in Windows Desktop. The `0.2.2` read-only source probe received the current thread ID in a real Desktop call but could not locate the rollout because `CODEX_HOME` was absent from its stdio process. Version `0.2.4` tried an unsupported manifest field and failed to load after restart. Installed version `0.2.5` removes that field, derives Codex Home from its local plugin-cache path when necessary, and retains a button to test panel-to-source calls. Desktop recovery and the current-thread data path await a fresh restart check. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the partial source matrix and evidence.
+
+### P0 diagnostic probe
+
+With Node.js installed, run `node plugins/codex-performance-profiler/scripts/probe.mjs --file <absolute-path-to-a-Codex-rollout.jsonl>`. The optional `--measure` flag reports one-shot process time and peak RSS to stderr. The JSON output aliases native IDs and includes only allowlisted telemetry fields. Do not commit or share raw rollout files.
+
+To make the P0 plugin available in local Codex, register this repository as a marketplace with `codex plugin marketplace add .`, then install `codex-performance-profiler@codex-performance-profiler-local` using `codex plugin add`. The package includes a static MCP App view for side-panel capability testing; it is not the planned telemetry product. To rebuild the committed, dependency-free runtime bundle, run `npm ci` and `npm run build` from the repository root. Run `npm test` for the MCP protocol, privacy, and timestamp checks.

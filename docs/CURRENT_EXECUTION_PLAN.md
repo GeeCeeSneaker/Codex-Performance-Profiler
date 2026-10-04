@@ -8,7 +8,7 @@
 
 `WO-0001-WINDOWS-DESKTOP-CAPABILITY-SPIKE`
 
-Status: `READY`
+Status: `IN_PROGRESS`
 
 Coordination Issue: #1 — `[WO-0001] P0 Windows Desktop capability and telemetry source spike`
 
@@ -34,3 +34,7 @@ Development may begin from WO-0001 immediately. The team may decompose the Work 
 ## Hard constraints
 
 No database, cloud telemetry, unsupported Desktop patch, generalized daemon, or full product UI in P0. Do not turn unavailable timing fields into inferred "thinking time".
+
+## Latest evidence
+
+The installable P0 MCP App/diagnostic skill and read-only rollout scanner, plus a partial Windows capability matrix, are recorded in `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md`. Version `0.2.1` repaired the initial blank view; both the global and thread-side views rendered in Desktop, satisfying AT-P0-01 for the static entrypoint at that head. Desktop delivered the current thread ID to the `0.2.2` source probe, but its stdio process lacked `CODEX_HOME`. Version `0.2.4` used an unsupported plugin manifest field and failed to load after restart, so its panel could not be tested. Installed version `0.2.5` removes that field and derives Codex Home from the installed cache path when the environment variable is absent. A fresh Desktop restart is needed to verify the entrypoint and panel-to-source call. The plugin-only live data path remains unverified, so P0 exit has not passed.
