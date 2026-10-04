@@ -58,4 +58,10 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-Project bootstrap. The first work package is a Windows Desktop capability/data-source spike. It must prove the plugin side-panel surface and the minimum reliable telemetry sources before substantial implementation is allowed.
+P0 capability/data-source spike is in progress. The `0.2.7` conversation-side panel rendered active and completed-turn data in Windows Desktop; the user confirmed running values updated automatically. The current `0.2.8` candidate retains only the thread entrypoint and incremental progress tool. The global probe, one-shot scanner, diagnostic skill, and duplicate snapshot parser have been removed following review. It is installed locally; restarted Desktop validation is pending. Native turn usage comes solely from `token_usage_record.turn_token_usage`. Resource and remaining telemetry gates are still open. See `docs/evidence/WO-0001-P0-CAPABILITY-PROBE.md` for the source matrix and evidence.
+
+### P0 conversation panel
+
+Open the profiler from the target Codex conversation using `profiler.open`. A visible panel reads appended records every five seconds. The package has no left-navigation entrypoint. Do not commit or share raw rollout files.
+
+To make the P0 plugin available in local Codex, register this repository as a marketplace with `codex plugin marketplace add .`, then install `codex-performance-profiler@codex-performance-profiler-local` using `codex plugin add` and restart Desktop. The package includes a small MCP App view for capability testing. To rebuild the committed runtime bundle, which requires Node.js but no runtime `npm install`, run `npm ci` and `npm run build` from the repository root. Run `npm test` for MCP discovery, source identity, incremental reads, and privacy checks.

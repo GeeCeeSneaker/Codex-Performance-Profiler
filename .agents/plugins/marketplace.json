@@ -1,0 +1,20 @@
+{
+  "name": "codex-performance-profiler-local",
+  "interface": {
+    "displayName": "Codex Performance Profiler P0"
+  },
+  "plugins": [
+    {
+      "name": "codex-performance-profiler",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex-performance-profiler"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -38,6 +38,8 @@ Capability evidence must be based on real Windows Desktop behavior, not inferred
 
 ## 4. Side-panel product
 
+The v1 primary entrypoint is the panel opened from the target conversation. This placement was confirmed by the Owner after the `0.2.7` conversation-side panel displayed automatically changing active values in Windows Desktop. Following review of that head, the `0.2.8` candidate removes the superseded global probe; there is no requirement to retain a separate left-navigation page.
+
 ### Live
 Show elapsed time, current known activity, model/tool aggregate time, call counts, token usage, current throughput when supported, and data-quality state. Refresh should normally be no faster than 2 Hz unless profiling evidence proves a faster rate has negligible cost and materially improves UX.
 
@@ -66,6 +68,10 @@ A single self-contained Windows executable is preferred over requiring users to 
 Treat Codex-owned session artifacts as authoritative read-only input. Never rewrite, truncate, rotate, move, or lock them in a way that can affect Codex. Readers must tolerate partially written tail records and resume incrementally.
 
 Do not store raw records in project-owned logs. Parse only the fields required for telemetry.
+
+The P0 adapter uses `token_usage_record.turn_token_usage` with explicit turn identity as its authoritative turn-usage source. `thread_token_usage` is separately scoped native thread usage; it must not be added to turn usage. Ignore `event_msg:token_count` for turn metrics: it has no turn ID and adjacent values do not reliably reconcile. No heuristic join is required. Input/output categories are reported directly with source and quality; cache ratios and cost require later semantic validation.
+
+The chosen source exposes tool start/end timestamps and status on completion. Precise live tool-start/running spans and model request/inference/TTFT/TBT are unavailable through the proven plugin path. Classify those gaps explicitly; a separate service is not justified solely to populate them.
 
 ## 7. Hooks
 

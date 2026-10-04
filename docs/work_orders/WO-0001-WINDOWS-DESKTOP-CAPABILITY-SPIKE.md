@@ -1,6 +1,6 @@
 # WO-0001 — Windows Desktop Capability and Telemetry Source Spike
 
-Status: `READY`
+Status: `IN_PROGRESS`
 
 Phase: `P0`
 

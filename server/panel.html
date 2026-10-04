@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profiler Panel Probe</title>
+  <style>
+    :root { color-scheme: light dark; font: 14px/1.5 system-ui, sans-serif; }
+    body { margin: 0; padding: 24px; }
+    main { max-width: 42rem; }
+    h1 { font-size: 1.3rem; margin: 0 0 .4rem; }
+    p { margin: .6rem 0; }
+    button { font: inherit; padding: .5rem .8rem; border: 1px solid currentColor; border-radius: 8px; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: default; }
+    .state { border: 1px solid currentColor; border-radius: 8px; padding: 12px; white-space: pre-line; }
+    small { opacity: .7; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Profiler panel probe</h1>
+    <p id="host-status">Waiting for MCP App host handshake</p>
+    <button id="source-probe" type="button" disabled>Refresh live state</button>
+    <p class="state" id="source-status" role="status">Waiting for a chat snapshot.</p>
+    <small>WO-0001 P0 capability test. Open this panel from a Codex chat for a read-only, content-free summary. Visible panels check for new records every five seconds.</small>
+  </main>
+  <!-- APP_SCRIPT -->
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "codex-performance-profiler",
+  "version": "0.2.8",
+  "description": "Local Codex Desktop conversation panel with read-only incremental telemetry"
+}
