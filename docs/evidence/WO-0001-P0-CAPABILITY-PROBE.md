@@ -23,6 +23,8 @@ Version `0.2.7` adds a bounded read-only JSONL cursor. Its first `profiler.open`
 
 The local marketplace now has `0.2.7` installed. SHA-256 hashes of its manifest, MCP configuration, bundled server, and panel HTML match the source build. A direct stdio call against that installed bundle, with `CODEX_HOME` deliberately absent, returned `verified`, an active turn, zero skipped records, exact observed usage, and zero bytes on an immediate repeat. The running Desktop session still advertises the older tool list; this is installed-bundle evidence, not restarted Desktop UI evidence.
 
+In a same-file local reconciliation, the original one-shot `profiler.sourceProbe` and the `0.2.7` incremental projection agreed on the latest completed turn's duration, **29** recognized tool completions, input tokens, and output tokens. The incremental scan skipped zero records. This supports the new projection's local correctness; visible Desktop usage reconciliation is still open.
+
 ## Capability and source matrix
 
 `SUPPORTED` means a documented host/package capability demonstrated locally; `AVAILABLE_INDIRECTLY` means a read-only rollout field was observed. `UNVERIFIED—NOT_EXERCISED` means the running Desktop renderer or a representative case has not been tested; `UNVERIFIED—INSPECTED_SOURCE_ABSENT` means the inspected rollout has no matching fact; `UNVERIFIED—APP_SERVER_ONLY` means the app-server protocol exposes a fact but this plugin has no proven subscription to the active Desktop instance. None of these is a claim that every possible future source is unavailable.
