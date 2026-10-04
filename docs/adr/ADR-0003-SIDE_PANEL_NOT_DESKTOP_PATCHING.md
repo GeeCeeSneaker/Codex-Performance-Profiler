@@ -13,3 +13,7 @@ The desired data is richer than a completion footer and unsupported UI injection
 ## Consequences
 
 Native `Worked for ...` decoration remains a future enhancement only if Codex exposes a supported completion-metadata extension point.
+
+## Owner clarification — 2026-10-03
+
+For v1, the conversation-side panel is the primary profiler entrypoint. The global left-navigation entry remains a P0 diagnostic probe. In the tested Desktop build, a chat-originating panel call matched that chat's rollout and showed changing active values, while the global page did not resolve to the chat's saved rollout. An independent global dashboard would require explicit chat selection or attachment and is not part of the current P0 implementation.
