@@ -22,7 +22,10 @@ test('active progress consumes only appended bytes and returns no native IDs or 
     { type: 'event_msg', payload: { type: 'item_completed', turn_id: TURN,
       item: { type: 'CommandExecution', status: 'completed', command: 'PRIVATE_COMMAND', stdout: 'PRIVATE_OUTPUT' } } },
     { type: 'token_usage_record', payload: { turn_id: TURN,
-      turn_token_usage: { input_tokens: 8, output_tokens: 3, secret: 'PRIVATE_USAGE' } } },
+      turn_token_usage: { input_tokens: 8, output_tokens: 3, secret: 'PRIVATE_USAGE' },
+      thread_token_usage: { input_tokens: 100, output_tokens: 50 } } },
+    { type: 'event_msg', payload: { type: 'token_count',
+      info: { last_token_usage: { input_tokens: 999 }, total_token_usage: { input_tokens: 1000 } } } },
   ]));
   const meta = { threadId: THREAD };
   const first = await probeCurrentProgress(meta, home);

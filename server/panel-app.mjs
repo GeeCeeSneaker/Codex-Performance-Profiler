@@ -3,7 +3,7 @@ import { App } from '@modelcontextprotocol/ext-apps';
 const status = document.getElementById('host-status');
 const sourceStatus = document.getElementById('source-status');
 const sourceButton = document.getElementById('source-probe');
-const app = new App({ name: 'Profiler Panel Probe', version: '0.2.7' });
+const app = new App({ name: 'Profiler Panel Probe', version: '0.2.8' });
 let refreshTimer;
 
 function usageText(usage) {
@@ -11,7 +11,7 @@ function usageText(usage) {
 }
 
 function showProbe(probe) {
-  if (!probe || typeof probe !== 'object' || ![2, 3].includes(probe.probe_version)) {
+  if (!probe || typeof probe !== 'object' || probe.probe_version !== 3) {
     sourceStatus.textContent = 'The host did not return a source summary.';
     return;
   }
@@ -27,7 +27,7 @@ function showProbe(probe) {
     `Thread context: ${probe.thread_context ?? 'unavailable'}`,
     `Rollout match: ${probe.rollout_match ?? 'unavailable'}`,
   ];
-  if (probe.rollout_match === 'verified' && probe.probe_version === 3) {
+  if (probe.rollout_match === 'verified') {
     const completed = probe.progress?.latest_completed_turn;
     const active = probe.progress?.active_turn;
     if (completed) {
@@ -42,15 +42,9 @@ function showProbe(probe) {
     }
     if (probe.update?.catching_up) lines.push('Reading earlier records; refresh to continue.');
     if (probe.progress?.skipped_records) lines.push('Some records could not be parsed; counts may be incomplete.');
-  } else if (probe.rollout_match === 'verified' && probe.summary?.turn) {
-    const turn = probe.summary.turn;
-    const duration = turn.wall_duration_ms;
-    lines.push(`Latest completed turn: ${duration?.value ?? 'unavailable'} ms (${duration?.quality ?? 'unavailable'})`);
-    lines.push(`Tool calls: ${turn.tool_spans?.length ?? 0}`);
-    lines.push(`Input/output tokens: ${usageText(turn.usage)}`);
   }
   sourceStatus.textContent = lines.join('\n');
-  if (probe.probe_version === 3 && probe.rollout_match === 'verified' && !refreshTimer) {
+  if (probe.rollout_match === 'verified' && !refreshTimer) {
     refreshTimer = setInterval(() => {
       if (document.visibilityState === 'visible') refreshProgress();
     }, 5000);

@@ -6,6 +6,8 @@ Status: Accepted
 
 Use supported plugin/MCP App/Extension entrypoints to present performance data beside a Codex conversation. Do not patch Codex Desktop binaries, DOM, Electron bundles, or native transcript/footer UI.
 
+The selected implementation is thread-only. The review of `08d1600` directed removal of superseded P0 surfaces before exit; `0.2.8` removes the global probe and retains the conversation opener/resource plus incremental progress tool. The earlier temporary retention of the global probe below is historical.
+
 ## Why
 
 The desired data is richer than a completion footer and unsupported UI injection would be brittle across Codex updates. A side panel provides space for live/turn/thread analysis while preserving host compatibility.

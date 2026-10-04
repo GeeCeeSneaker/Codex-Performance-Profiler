@@ -12,27 +12,22 @@ test('plugin MCP manifest uses only fields accepted by the tested Desktop loader
   assert.deepEqual(Object.keys(manifest.mcpServers['panel-probe']).sort(), ['args', 'command', 'cwd', 'type']);
 });
 
-test('stdio MCP App advertises global and thread entrypoints and serves a static fullscreen view', async () => {
+test('stdio MCP App ships only a thread opener and incremental progress tool', async () => {
   const client = new Client({ name: 'p0-panel-test', version: '1.0.0' });
   const serverPath = process.env.PANEL_SERVER_PATH ?? 'plugins/codex-performance-profiler/dist/server.mjs';
   const transport = new StdioClientTransport({ command: process.execPath, args: [serverPath] });
   try {
     await client.connect(transport);
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 3);
+    assert.equal(tools.length, 2);
     const opener = tools.find((tool) => tool.name === 'profiler.open');
     assert.ok(opener);
-    assert.ok(tools.some((tool) => tool.name === 'profiler.sourceProbe'));
     assert.ok(tools.some((tool) => tool.name === 'profiler.progressProbe'));
-    assert.deepEqual(opener._meta?.['openai/ui']?.entrypoints, [{ type: 'global' }, { type: 'thread' }]);
+    assert.deepEqual(opener._meta?.['openai/ui']?.entrypoints, [{ type: 'thread' }]);
     const result = await client.callTool({ name: 'profiler.open', arguments: {} });
     assert.equal(result.isError, undefined);
     assert.deepEqual(result.structuredContent, {
       probe_version: 3, thread_context: 'unavailable', rollout_match: 'unavailable',
-    });
-    const source = await client.callTool({ name: 'profiler.sourceProbe', arguments: {} });
-    assert.deepEqual(source.structuredContent, {
-      probe_version: 2, thread_context: 'unavailable', rollout_match: 'unavailable',
     });
     const progress = await client.callTool({ name: 'profiler.progressProbe', arguments: {} });
     assert.deepEqual(progress.structuredContent, {
@@ -78,9 +73,6 @@ test('stdio MCP tool receives threadId metadata and returns only a sanitized mat
   });
   try {
     await client.connect(transport);
-    const result = await client.callTool({ name: 'profiler.sourceProbe', arguments: {}, _meta: { threadId } });
-    assert.equal(result.structuredContent?.rollout_match, 'verified');
-    assert.equal(result.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
     const opened = await client.callTool({ name: 'profiler.open', arguments: {}, _meta: { threadId } });
     assert.equal(opened.structuredContent?.rollout_match, 'verified');
     assert.equal(opened.structuredContent?.progress?.latest_completed_turn?.wall_duration_ms?.value, 1_000);
@@ -88,8 +80,8 @@ test('stdio MCP tool receives threadId metadata and returns only a sanitized mat
     const progress = await client.callTool({ name: 'profiler.progressProbe', arguments: {}, _meta: { threadId } });
     assert.equal(progress.structuredContent?.update?.bytes_read, 0);
     for (const forbidden of [threadId, 'PRIVATE_']) {
-      assert.ok(!JSON.stringify(result).includes(forbidden));
       assert.ok(!JSON.stringify(opened).includes(forbidden));
+      assert.ok(!JSON.stringify(progress).includes(forbidden));
     }
   } finally {
     await client.close();
@@ -120,9 +112,9 @@ test('installed bundle locates its Codex home without an inherited CODEX_HOME va
   });
   try {
     await client.connect(transport);
-    const result = await client.callTool({ name: 'profiler.sourceProbe', arguments: {}, _meta: { threadId } });
+    const result = await client.callTool({ name: 'profiler.open', arguments: {}, _meta: { threadId } });
     assert.equal(result.structuredContent?.rollout_match, 'verified');
-    assert.equal(result.structuredContent?.summary?.turn?.wall_duration_ms?.value, 1_000);
+    assert.equal(result.structuredContent?.progress?.latest_completed_turn?.wall_duration_ms?.value, 1_000);
     assert.ok(!JSON.stringify(result).includes('PRIVATE_'));
   } finally {
     await client.close();

@@ -3,7 +3,6 @@ import { glob } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
-import { summarizeRollout } from '../plugins/codex-performance-profiler/scripts/probe.mjs';
 
 const THREAD_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -57,20 +56,5 @@ export async function findCurrentRollout(requestMeta, codexHome = process.env.CO
   } catch {
     // Paths, native IDs, and raw records must not escape through diagnostics.
     return { thread_context: 'provided', rollout_match: 'read_error' };
-  }
-}
-
-export async function probeCurrentSource(requestMeta, codexHome = process.env.CODEX_HOME || installedCodexHome()) {
-  const match = await findCurrentRollout(requestMeta, codexHome);
-  if (match.rollout_match !== 'verified') return { probe_version: 2, ...match };
-  try {
-    return {
-      probe_version: 2,
-      thread_context: 'provided',
-      rollout_match: 'verified',
-      summary: await summarizeRollout(records(match.file)),
-    };
-  } catch {
-    return { probe_version: 2, thread_context: 'provided', rollout_match: 'read_error' };
   }
 }
