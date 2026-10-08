@@ -1,36 +1,31 @@
 # Current Execution Plan
 
-## Active phase
+## Status
 
-**P0 — Windows Desktop capability and data-source spike**
+**STOPPED / SUPERSEDED by Owner decision on 2026-10-07.**
 
-## Active Work Order
+No further standalone development is authorized in this repository.
 
-`WO-0001-WINDOWS-DESKTOP-CAPABILITY-SPIKE`
+The former P0 Windows Desktop capability/data-source spike is preserved only as migration evidence:
 
-Status: `READY`
+- source/evidence branch: `feat/wo-0001-capability-spike`
+- exact retained head: `b81f174137cd886f16e90de117cb2bed75c29589`
+- main-branch coordination Issue: #1
 
-Coordination Issue: #1 — `[WO-0001] P0 Windows Desktop capability and telemetry source spike`
+## Migration destination
 
-## Objective
+Reusable functionality is being incorporated into ADCP under the Execution Node Stack / Management Plane program.
 
-Prove the supported Codex Windows Desktop integration surface and exact telemetry sources before substantial implementation.
+Target ownership:
 
-## Required outputs
+- **ADCP Controller / Provider Adapter** — per-run/per-turn Agent telemetry collection, normalization, local live monitoring, resource attribution, and bounded local summaries;
+- **ADCP Management Plane** — cross-node/cross-Agent historical aggregation, comparison, cost/usage analytics, Dashboard/API;
+- **MCPRelay** — generic process/resource observation and multi-node transport/routing, not provider-specific telemetry semantics.
 
-- minimal installable plugin/extension scaffold;
-- real Windows Desktop side-panel proof or precise upstream limitation;
-- Codex version/capability matrix;
-- one real turn mapped across available lifecycle/usage/tool/timing sources;
-- sanitized evidence;
-- decision whether a local companion is necessary;
-- initial resource baseline;
-- P0 findings recorded in DEVLOG/ADR if they change architecture.
+See `docs/14-ADCP-MIGRATION_HANDOFF.md`.
 
-## Dispatch rule
+## Repository rule
 
-Development may begin from WO-0001 immediately. The team may decompose the Work Order into Issues/PRs, but P0 exit requires one coherent evidence package and independent review.
+Do not resume WO-0001, open follow-on standalone profiler Work Orders, or merge the P0 feature branch as a product release unless the Owner explicitly reverses this supersession decision.
 
-## Hard constraints
-
-No database, cloud telemetry, unsupported Desktop patch, generalized daemon, or full product UI in P0. Do not turn unavailable timing fields into inferred "thinking time".
+The retained P0 branch may be read, compared, or selectively ported into ADCP. Migration must preserve exact metric provenance/quality semantics and minimum-necessary/resource constraints.
