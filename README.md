@@ -1,5 +1,10 @@
 # Codex Performance Profiler
 
+> [!IMPORTANT]
+> **Project status: superseded by ADCP integration.** Independent development of Codex Performance Profiler has stopped by Owner decision on 2026-10-07. The reusable telemetry contracts, P0 evidence, and selected implementation ideas are being migrated into the ADCP resident Controller / Management Plane architecture. This repository is retained as a migration reference; do not start new standalone product work here.
+>
+> Proven P0 implementation/evidence reference: `feat/wo-0001-capability-spike@b81f174137cd886f16e90de117cb2bed75c29589`. See `docs/14-ADCP-MIGRATION_HANDOFF.md`.
+
 Local-first performance, usage, and cost observability for Codex, starting with **Codex Windows Desktop** and designed from day one to evolve into a provider-neutral Agent Telemetry Core for ADCP.
 
 ## Mission
@@ -58,4 +63,4 @@ The repository is the durable project record. Start with:
 
 ## Current status
 
-Project bootstrap. The first work package is a Windows Desktop capability/data-source spike. It must prove the plugin side-panel surface and the minimum reliable telemetry sources before substantial implementation is allowed.
+**Standalone development stopped / superseded.** No additional Codex Desktop product milestones are authorized in this repository. Existing main-branch design contracts and the unmerged P0 branch remain source material for ADCP migration. The P0 result is not independently accepted as a standalone release and must not be represented as one.
